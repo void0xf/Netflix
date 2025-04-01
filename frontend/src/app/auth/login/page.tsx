@@ -4,14 +4,11 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
-  Container,
   Grid,
-  Link,
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import { grey, deepPurple, blue } from "@mui/material/colors";
+import { grey, blue } from "@mui/material/colors";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
@@ -29,18 +26,12 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Tutaj możesz dodać logikę do wysłania danych do API
-  };
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate>
+    <Box component="form">
       <Grid container spacing={3}>
         <TextField
           fullWidth
@@ -51,9 +42,6 @@ const Login = () => {
           onChange={handleChange}
           required
           variant="filled"
-          InputProps={{
-            disableUnderline: true,
-          }}
           sx={{
             "& .MuiFilledInput-root": {
               backgroundColor: grey[700],
