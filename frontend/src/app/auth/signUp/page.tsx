@@ -8,7 +8,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import { grey, blue } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const SignUp = () => {
@@ -31,8 +31,34 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
 
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const inputStyles = {
+    "& .MuiFilledInput-root": {
+      backgroundColor: "transparent",
+      borderRadius: 1,
+      border: "2px solid transparent",
+      color: "white",
+      transition: "border 0.2s ease-in-out",
+
+      "&.Mui-focused": {
+        backgroundColor: "black",
+        border: "2px solid red",
+      },
+    },
+    "& .MuiInputLabel-root": {
+      color: grey[400],
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "red",
+    },
+  };
+
   return (
-    <Box component="form">
+    <Box component="form" onSubmit={sendData}>
       <Grid container spacing={3}>
         <TextField
           fullWidth
@@ -42,28 +68,10 @@ const SignUp = () => {
           onChange={handleChange}
           required
           variant="filled"
-          InputProps={{
-            disableUnderline: true,
-          }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          InputProps={{ disableUnderline: true }}
+          sx={inputStyles}
         />
+
         <TextField
           fullWidth
           label="Nazwisko"
@@ -72,28 +80,10 @@ const SignUp = () => {
           onChange={handleChange}
           required
           variant="filled"
-          InputProps={{
-            disableUnderline: true,
-          }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          InputProps={{ disableUnderline: true }}
+          sx={inputStyles}
         />
+
         <TextField
           fullWidth
           label="Email"
@@ -103,28 +93,10 @@ const SignUp = () => {
           onChange={handleChange}
           required
           variant="filled"
-          InputProps={{
-            disableUnderline: true,
-          }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          InputProps={{ disableUnderline: true }}
+          sx={inputStyles}
         />
+
         <TextField
           fullWidth
           label="Hasło"
@@ -149,24 +121,7 @@ const SignUp = () => {
               </InputAdornment>
             ),
           }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          sx={inputStyles}
         />
         <TextField
           fullWidth
@@ -192,24 +147,7 @@ const SignUp = () => {
               </InputAdornment>
             ),
           }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          sx={inputStyles}
         />
       </Grid>
 
@@ -220,9 +158,10 @@ const SignUp = () => {
         sx={{
           mt: 4,
           py: 1.5,
+          bgcolor: red[400],
           color: "common.white",
           "&:hover": {
-            bgcolor: blue[500],
+            bgcolor: red[600],
           },
           borderRadius: 1,
           fontSize: "1rem",
