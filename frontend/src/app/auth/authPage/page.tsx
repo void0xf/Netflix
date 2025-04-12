@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Typography, Container, Tabs, Tab } from "@mui/material";
-import { teal, grey, deepPurple, pink } from "@mui/material/colors"; // Add pink for tab colors
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Typography, Container, Tabs, Tab, Stack } from "@mui/material";
+import { grey } from "@mui/material/colors"; // Add pink for tab colors
 import SignUp from "../signUp/page";
+import svgBackground from "../authPage/svgBackground.svg";
 import Login from "../login/page";
-
-// Custom TabPanel component for Material UI Tabs
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -75,16 +73,22 @@ const AuthWindow = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
+    <Stack
+      sx={{
+        py: 10,
+        display: "flex",
+        alignItems: "center",
+        height: "100vh",
+        position: "relative",
+        background: "#101010",
+      }}
+    >
       <Box
         sx={{
-          mt: 4,
           p: 4,
-          boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.5)",
           borderRadius: 2,
-          bgcolor: "background.paper",
-          background: `linear-gradient(145deg, ${grey[900]}, ${grey[800]})`,
-          border: `1px solid ${grey[700]}`,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          width: "40rem",
         }}
       >
         <Typography
@@ -105,10 +109,15 @@ const AuthWindow = () => {
         <Tabs
           value={value}
           onChange={(event, newValue) => setValue(newValue)}
+          textColor="inherit"
+          indicatorColor="primary"
           aria-label="Auth tabs"
           sx={{
             "--Tab-indicatorThickness": "3px",
             "--Tab-indicatorRadius": "4px",
+            "& .MuiTabs-indicator": { backgroundColor: "red" },
+            "& .MuiTab-root": { color: "grey" },
+            "& .Mui-selected": { color: "red" },
           }}
         >
           <Tab
@@ -137,7 +146,7 @@ const AuthWindow = () => {
           </Box>
         </TabPanel>
       </Box>
-    </Container>
+    </Stack>
   );
 };
 

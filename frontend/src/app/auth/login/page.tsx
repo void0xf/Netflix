@@ -8,7 +8,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import { grey, blue } from "@mui/material/colors";
+import { grey, blue, red } from "@mui/material/colors";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
@@ -30,36 +30,40 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const inputStyles = {
+    "& .MuiFilledInput-root": {
+      backgroundColor: "transparent",
+      borderRadius: 1,
+      border: "2px solid transparent",
+      color: "white",
+      transition: "border 0.2s ease-in-out",
+
+      "&.Mui-focused": {
+        backgroundColor: "black",
+        border: "2px solid red",
+      },
+    },
+    "& .MuiInputLabel-root": {
+      color: grey[400],
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "red",
+    },
+  };
+
   return (
     <Box component="form">
       <Grid container spacing={3}>
         <TextField
           fullWidth
-          label="Email"
-          name="email"
-          type="email"
+          label="Nazwisko"
+          name="lastName"
           value={formData.email}
           onChange={handleChange}
           required
           variant="filled"
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          InputProps={{ disableUnderline: true }}
+          sx={inputStyles}
         />
         <TextField
           fullWidth
@@ -85,24 +89,7 @@ const Login = () => {
               </InputAdornment>
             ),
           }}
-          sx={{
-            "& .MuiFilledInput-root": {
-              backgroundColor: grey[700],
-              borderRadius: 1,
-              "&:hover": {
-                backgroundColor: grey[600],
-              },
-              "&.Mui-focused": {
-                backgroundColor: grey[600],
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: grey[400],
-            },
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: grey[300],
-            },
-          }}
+          sx={inputStyles}
         />
       </Grid>
 
@@ -113,9 +100,10 @@ const Login = () => {
         sx={{
           mt: 4,
           py: 1.5,
+          bgcolor: red[400],
           color: "common.white",
           "&:hover": {
-            bgcolor: blue[500],
+            bgcolor: red[600],
           },
           borderRadius: 1,
           fontSize: "1rem",
