@@ -42,7 +42,7 @@ const AuthWindow = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [value, setValue] = useState(0); // Current active tab
+  const [value, setValue] = useState(0); 
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,35 +54,23 @@ const AuthWindow = () => {
     setRegisterData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Login submitted:", loginData);
-    // Add logic to send data to API
-  };
 
-  // Handle registration form submission
-  const handleRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Registration submitted:", registerData);
-    // Add logic to send data to API
-  };
-
-  // Toggle password visibility
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <Stack
-      sx={{
-        py: 10,
-        display: "flex",
-        alignItems: "center",
-        height: "100vh",
-        position: "relative",
-        background: "#101010",
-      }}
-    >
+      <Box
+          sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100vh",
+              backgroundColor: "#101010",
+              py: 4,
+          }}
+      >
       <Box
         sx={{
           p: 4,
@@ -90,21 +78,11 @@ const AuthWindow = () => {
           backgroundColor: "rgba(0,0,0,0.5)",
           width: "40rem",
         }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          gutterBottom
-          sx={{
-            color: "common.white",
-            fontWeight: 700,
-            letterSpacing: 1,
-            mb: 3,
-          }}
-        >
-          Netflix better
-        </Typography>
+          >
+        <Box mb={4} display="flex" justifyContent="center">
+             <img src="/logo-no-background.png" alt="Logo" style={{ height: 80 }} />
+        </Box>
+        
 
         <Tabs
           value={value}
@@ -139,14 +117,11 @@ const AuthWindow = () => {
         <TabPanel value={value} index={0}>
           <Login />
         </TabPanel>
-
-        <TabPanel value={value} index={1}>
-          <Box component="form" onSubmit={handleRegisterSubmit} noValidate>
-            <SignUp />
-          </Box>
-        </TabPanel>
+              <TabPanel value={value} index={1}>
+                  <SignUp />
+              </TabPanel>
       </Box>
-    </Stack>
+    </Box>
   );
 };
 
