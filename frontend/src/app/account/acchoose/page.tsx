@@ -49,7 +49,7 @@ const AccountChoose = () => {
     if (!user || !userProfile) return null;
 
     const handleAccountClick = (accountName: string) => {
-        console.log(accountName);
+        router.push('/browse')
     };
 
     const handleSettingsClick = () => {
