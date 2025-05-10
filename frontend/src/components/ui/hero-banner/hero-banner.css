@@ -1,0 +1,376 @@
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  max-height: 800px;
+  min-height: 500px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.hero-thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center top;
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero-player-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-media-player {
+  --brand-color: #f5f5f5;
+  --focus-color: #4e9cf6;
+
+  --video-brand: var(--brand-color);
+  --video-focus-ring-color: var(--focus-color);
+  --video-border-radius: 0px;
+
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.hero-media-player video {
+  object-fit: cover;
+  object-position: center top;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide default controls */
+.hero-media-player .vds-controls {
+  display: none !important;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    77deg,
+    rgba(0, 0, 0, 0.6) 0,
+    rgba(0, 0, 0, 0) 85%
+  ), 
+  linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.8) 80%,
+    rgb(0, 0, 0) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 25%;
+  left: 4%;
+  width: 36%;
+  min-width: 400px;
+  max-width: 500px;
+  color: white;
+  z-index: 3;
+}
+
+.hero-logo {
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em; /* Netflix-style tight letter spacing */
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.6rem 1.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em; /* Netflix buttons have slightly wider letter spacing */
+}
+
+.play-button {
+  background-color: white;
+  color: black;
+  border: none;
+}
+
+.play-button:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.info-button {
+  background-color: rgba(109, 109, 110, 0.7);
+  color: white;
+  border: none;
+}
+
+.info-button:hover {
+  background-color: rgba(109, 109, 110, 0.4);
+}
+
+.volume-toggle {
+  position: absolute;
+  right: 30px;
+  bottom: 35%;
+  background-color: rgba(51, 51, 51, 0.6);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+.volume-toggle:hover {
+  background-color: rgba(51, 51, 51, 0.8);
+  transform: scale(1.1);
+}
+
+/* Info Modal Styles */
+.hero-info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.hero-info-modal-content {
+  width: 85%;
+  max-width: 950px;
+  max-height: 90vh;
+  background-color: #181818;
+  border-radius: 6px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  animation: modalSlideUp 0.4s ease;
+}
+
+.hero-info-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #181818;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+.hero-info-modal-close:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.hero-info-modal-header {
+  position: relative;
+  height: 30vh;
+  min-height: 300px;
+  max-height: 500px;
+}
+
+.hero-info-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 20%;
+  opacity: 0.6;
+}
+
+.hero-info-modal-backdrop::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(24, 24, 24, 0) 0%,
+    rgba(24, 24, 24, 0.4) 60%,
+    rgba(24, 24, 24, 1) 90%
+  );
+}
+
+.hero-info-modal-title-area {
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+  width: 60%;
+  z-index: 2;
+}
+
+.hero-info-modal-title-area .hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-info-modal-title-area .hero-logo {
+  max-width: 300px;
+  margin-bottom: 1rem;
+}
+
+.hero-info-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  color: #ddd;
+  font-size: 0.95rem;
+}
+
+.hero-info-year, .hero-info-rating {
+  margin-right: 10px;
+}
+
+.hero-info-rating {
+  border: 1px solid #ddd;
+  padding: 0 5px;
+}
+
+.play-button-large {
+  padding: 0.8rem 2rem;
+}
+
+.hero-info-modal-body {
+  padding: 30px 40px 40px;
+  color: white;
+}
+
+.hero-info-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.hero-info-details {
+  color: #ddd;
+  line-height: 1.6;
+}
+
+.hero-info-label {
+  color: #999;
+  margin-right: 5px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    width: 80%;
+    left: 10%;
+    bottom: 20%;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-description {
+    font-size: 1rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .hero-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-info-modal-content {
+    width: 95%;
+  }
+
+  .hero-info-modal-header {
+    height: 25vh;
+    min-height: 200px;
+  }
+
+  .hero-info-modal-title-area {
+    left: 20px;
+    width: 80%;
+  }
+
+  .hero-info-modal-title-area .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-info-modal-body {
+    padding: 20px;
+  }
+} 
