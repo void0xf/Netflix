@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <header className={`${isScrolled ? 'bg-black' : 'bg-gradient-to-b from-black/80 to-transparent'} fixed top-0 z-50 w-full transition-all duration-500`}>
-      <div className="flex items-center justify-between px-4 md:px-10 py-4">
+      <div className="flex items-center justify-between mx-8 md:px-10 py-4">
         {/* Left section - Logo and Navigation */}
         <div className="flex items-center space-x-8">
           {/* Netflix Logo */}
