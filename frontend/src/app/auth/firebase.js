@@ -2,16 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-
 const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: "AIzaSyDMf26akL5pIj5yo6_f-iMgcR8HMnOJ-hY",
+  authDomain: "netflix-2-0-7e1e2.firebaseapp.com",
+  projectId: "netflix-2-0-7e1e2",
+  storageBucket: "netflix-2-0-7e1e2.firebasestorage.app",
+  messagingSenderId: "201193233825",
+  appId: "1:201193233825:web:3a212aa0229f31cf357fe0",
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
