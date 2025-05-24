@@ -50,23 +50,11 @@ const MainPage = () => {
         justifyContent: "center",
         minHeight: "100vh",
         color: "white",
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://assets.nflxext.com/ffe/siteui/vlv3/cb17c41d-6a67-4472-8b91-cca977e65276/web/PL-pl-20250505-TRIFECTA-perspective_d68f49b7-276b-44b1-9d22-5db71cf9d528_large.jpg')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
         paddingTop: "20px",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          height: "70%",
-          right: 0,
-          bottom: 0,
-          backgroundImage:
-            "url('https://assets.nflxext.com/ffe/siteui/vlv3/cb17c41d-6a67-4472-8b91-cca977e65276/web/PL-pl-20250505-TRIFECTA-perspective_d68f49b7-276b-44b1-9d22-5db71cf9d528_large.jpg')",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          filter: "brightness(0.4)",
-          zIndex: -1,
-        },
       }}
     >
       <Container
