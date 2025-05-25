@@ -89,17 +89,17 @@ export function Player() {
         ref={player}
       >
         <MediaProvider>
-          <Poster
+          {/* <Poster
             className="vds-poster"
-            src="https://files.vidstack.io/sprite-fight/poster.webp"
+            src="https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg"
             alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
-          />
+          /> */}
         </MediaProvider>
 
         {/* Layouts */}
         <DefaultVideoLayout
           icons={defaultLayoutIcons}
-          thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
+          thumbnails=""
         />
       </MediaPlayer>
     </div>

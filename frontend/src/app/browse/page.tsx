@@ -1,20 +1,17 @@
-"use client";
-import Carousel from "@/components/ui/preview-carousel/carousel";
-import CarouselItem, {
-  CarouselItemProps,
-} from "@/components/ui/preview-carousel/carousel-item";
-import Navbar from "@/features/browse/navbar";
-import React, { useMemo } from "react";
 
-// Helper function to shuffle an array
-const shuffleArray = (array: any[]) => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
+"use client"
+import Carousel from '@/components/ui/preview-carousel/carousel';
+import CarouselItem, { CarouselItemProps } from '@/components/ui/preview-carousel/carousel-item';
+import Navbar from '@/features/browse/navbar';
+import Footer from '@/features/browse/footer';
+import React, { useEffect, useMemo, useState } from 'react'
+import HeroBanner from '@/components/ui/hero-banner/hero-banner';
+import './netflix-fonts.css';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+
+import { Movie } from '@/types/movie';
+
 
 export const trendingContent = [
   {
@@ -115,12 +112,72 @@ const Page = () => {
       ...item,
       match: item.match || Math.floor(Math.random() * 20) + 80, // Random match between 80-99%
     }));
+
+
+const HLS_DEMO_VIDEO = "https://customer-m033z5x00ks6nunl.cloudflarestream.com/b236bde30eb07b9d01318940e5fc3eda/manifest/video.m3u8";
+const AVATAR_DESCRIPTION = "Set in the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting the world he feels is his home.";
+
+const Page = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [continueWatching, setContinueWatching] = useState<Movie[]>([]);
+  const [trendingContent, setTrendingContent] = useState<Movie[]>([]);
+
+  const [netflixOriginals, setNetflixOriginals] = useState<Movie[]>([]);
+  const [featuredItem, setFeaturedItem] = useState<Movie | null>(null);
+
+  useEffect(() => {
+    const moviesCol = collection(db, "movies");
+
+    async function fetchAllMovies() {
+      try {
+        const snapshot = await getDocs(moviesCol);
+        const fetchedMovies = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as unknown as Movie[];
+        setMovies(fetchedMovies);
+        if (fetchedMovies.length > 0) {
+          setFeaturedItem(fetchedMovies[0]);
+          setTrendingContent(fetchedMovies.slice(0, 10))
+          setContinueWatching(fetchedMovies.slice(20, 30));
+          setNetflixOriginals(fetchedMovies.slice(30, 50)); 
+        }
+        return fetchedMovies;
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    }
+    fetchAllMovies();
   }, []);
 
+
+
+  const heroBannerProps = featuredItem ? {
+    id: featuredItem.id,
+    title: featuredItem.title,
+    description: AVATAR_DESCRIPTION, 
+    videoUrl: HLS_DEMO_VIDEO, 
+    thumbnailUrl: featuredItem.thumbnail,
+  } : {
+    id: '',
+    title: 'Loading...',
+    description: '',
+    videoUrl: '',
+    thumbnailUrl: '',
+  };
+
   return (
-    <>
+    <div className="netflix-font">
       <Navbar />
-      <main className="mt-20 bg-black text-white min-h-screen">
+
+      <HeroBanner
+        id={heroBannerProps.id}
+        title={heroBannerProps.title}
+        description={heroBannerProps.description}
+        videoUrl={heroBannerProps.videoUrl}
+        thumbnailUrl={heroBannerProps.thumbnailUrl}
+      />
+      <main className='bg-black text-white mx-20'>
         <Carousel title="Trending Now">
           {trendingContent.map((item) => (
             <CarouselItem
@@ -129,12 +186,11 @@ const Page = () => {
               title={item.title}
               thumbnail={item.thumbnail}
               provider={item.provider}
-              badge={item.badge}
+              // badge={item.badge}
             />
           ))}
         </Carousel>
 
-        {/* Continue Watching with progress bars */}
         <Carousel title="Continue Watching" showTitleArrow={true}>
           {continueWatching.map((item) => (
             <CarouselItem
@@ -148,6 +204,7 @@ const Page = () => {
                 <div
                   className="bg-red-600 h-full"
                   style={{ width: `${item.progress}%` }}
+
                 />
               </div>
             </CarouselItem>
@@ -165,7 +222,7 @@ const Page = () => {
               provider={item.provider}
             >
               <div className="mt-1 text-xs text-green-500 font-medium">
-                {item.match}% Match
+                {50}% Match
               </div>
             </CarouselItem>
           ))}
@@ -174,5 +231,9 @@ const Page = () => {
     </>
   );
 };
+      <Footer />
+    </div>
+  )
+}
 
 export default Page;
