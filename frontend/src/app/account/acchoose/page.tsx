@@ -48,9 +48,14 @@ const AccountChoose = () => {
 
     if (!user || !userProfile) return null;
 
-    const handleAccountClick = (accountName: string) => {
-        router.push('/browse')
-    };
+    const handleAccountClick = (account: any) => {
+        localStorage.setItem("selectedAccount", JSON.stringify({
+            nazwaKonta: account.nazwaKonta,
+            avatarurl: account.avatarurl,
+            ograniczenieDorosli: account.ograniczenieDorosli
+        }));
+        router.push('/browse');
+    };  
 
     const handleSettingsClick = () => {
         router.push("/account/accsetingss");
@@ -67,10 +72,12 @@ const AccountChoose = () => {
                         <Button
                             onClick={() => handleAccountClick(account.nazwaKonta)}
                             sx={{
-                                background: "orange",
+                                backgroundImage: `url(${account.avatarurl || "avatar2.jpg"})`,
+                                backgroundSize: "cover", 
+                                backgroundPosition: "center",
                                 width: "120px",
                                 height: "120px",
-                                borderRadius: "12px",
+                                borderRadius: "0px",
                                 mb: 1
                             }}
                         />

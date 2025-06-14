@@ -67,7 +67,9 @@ const AuthWindow = () => {
               justifyContent: "center",
               alignItems: "center",
               minHeight: "100vh",
-              backgroundColor: "#101010",
+              backgroundImage: 'url("/background.jpg")', 
+              backgroundSize: "cover", 
+              backgroundPosition: "center",
               py: 4,
           }}
       >

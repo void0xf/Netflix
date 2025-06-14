@@ -228,7 +228,7 @@ const SignUp = () => {
                 sx={{
                     mt: 4,
                     py: 1.5,
-                    bgcolor: orange[900],
+                    bgcolor: red[900],
                     color: "common.white",
                     "&:hover": {
                         bgcolor: red[600],

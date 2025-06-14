@@ -4,8 +4,23 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search, Bell, ChevronDown } from 'lucide-react'
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from "../../app/auth/firebase";
+
+
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>("/avatarImages/avatar1.jpg");
+
+  useEffect(() => {
+    const data = localStorage.getItem("selectedAccount");
+    if (data) {
+      const account = JSON.parse(data);
+      setAvatarUrl(account.avatarurl || "/avatarImages/avatar1.jpg");
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,12 +35,19 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+   
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <header className={`${isScrolled ? 'bg-black' : 'bg-gradient-to-b from-black/80 to-transparent'} fixed top-0 z-50 w-full transition-all duration-500`}>
       <div className="flex items-center justify-between mx-8 md:px-10 py-4">
-        {/* Left section - Logo and Navigation */}
         <div className="flex items-center space-x-8">
-          {/* Netflix Logo */}
           <Link href="/browse" className="cursor-pointer">
             <svg viewBox="0 0 111 30" className="h-6 w-20 md:h-8 md:w-28 fill-[#e50914]" aria-hidden="true" focusable="false">
               <g>
@@ -34,27 +56,17 @@ const Navbar = () => {
             </svg>
           </Link>
 
-          {/* Navigation menu */}
           <div className="hidden md:flex space-x-4">
             <Link href="/browse" className="text-white hover:text-gray-300 text-sm font-light">
               Home
             </Link>
             <Link href="/browse/tv-shows" className="text-white hover:text-gray-300 text-sm font-light">
-              TV Shows
+              History
             </Link>
-            <Link href="/browse/movies" className="text-white hover:text-gray-300 text-sm font-light">
-              Movies
-            </Link>
-            <Link href="/browse/new-popular" className="text-white hover:text-gray-300 text-sm font-light">
-              New & Popular
-            </Link>
-            <Link href="/browse/my-list" className="text-white hover:text-gray-300 text-sm font-light">
-              My List
-            </Link>
+            
           </div>
         </div>
 
-        {/* Right section - Search, Notifications, Profile */}
         <div className="flex items-center space-x-4">
           <Search className="h-6 w-6 text-white cursor-pointer hover:text-gray-300 transition-colors" />
           
@@ -62,41 +74,43 @@ const Navbar = () => {
             <Bell className="h-6 w-6 text-white cursor-pointer hover:text-gray-300 transition-colors" />
           </div>
           
-          {/* Profile dropdown */}
-          <div className="flex items-center space-x-2 cursor-pointer group">
-            <Image 
-              src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-              alt="Profile"
-              width={10}
-              height={10}
-              className="rounded-sm h-8 w-8"
-            />
-            <ChevronDown className="h-4 w-4 text-white group-hover:rotate-180 transition duration-300" />
-            
-            {/* Dropdown content - hidden by default, shown on hover */}
-            <div className="absolute top-12 right-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 bg-black/90 border border-gray-700 p-4 rounded-md">
-              <div className="flex flex-col space-y-3 min-w-[180px]">
-                <div className="border-b border-gray-700 pb-2">
-                  <Link href="/account/acchoose" className="text-white hover:underline text-sm">
-                    Manage Profiles
+            <div className="flex items-center space-x-2 cursor-pointer group relative">
+              <Image 
+                src= {avatarUrl}
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <ChevronDown className="h-4 w-4 text-white group-hover:rotate-180 transition duration-300" />
+              
+              <div className="absolute top-12 right-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 bg-black/90 border border-gray-700 p-4 rounded-md z-50">
+                <div className="flex flex-col space-y-3 min-w-[180px]">
+                  <div className="border-b border-gray-700 pb-2">
+                    <Link href="/account/acchoose" className="text-white hover:underline text-sm">
+                      Manage Profiles
+                    </Link>
+                  </div>
+                  <Link href="/account" className="text-white hover:underline text-sm">
+                    Account
                   </Link>
+                  <button
+                    className="text-white text-left hover:underline text-sm"
+                    onClick={async () => {
+                      const { signOut } = await import("firebase/auth");
+                      await signOut(auth);
+                      window.location.href = "/auth/authPage";
+                    }}
+                  >
+                    Sign out of Netflix
+                  </button>
                 </div>
-                <Link href="/account" className="text-white hover:underline text-sm">
-                  Account
-                </Link>
-                <Link href="/help" className="text-white hover:underline text-sm">
-                  Help Center
-                </Link>
-                <button className="text-white text-left hover:underline text-sm">
-                  Sign out of Netflix
-                </button>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

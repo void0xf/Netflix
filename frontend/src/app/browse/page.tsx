@@ -65,7 +65,7 @@ const Page = () => {
   };
 
   return (
-    <div className="netflix-font">
+    <div className="netflix-font bg-black">
       <Navbar />
       <HeroBanner
         id={heroBannerProps.id}
@@ -74,7 +74,7 @@ const Page = () => {
         videoUrl={heroBannerProps.videoUrl}
         thumbnailUrl={heroBannerProps.thumbnailUrl}
       />
-      <main className='bg-black text-white mx-20'>
+      <main className='bg-black text-white '>
         <Carousel title="Trending Now">
           {trendingContent.map((item) => (
             <CarouselItem

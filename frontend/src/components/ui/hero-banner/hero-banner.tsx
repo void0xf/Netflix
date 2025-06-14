@@ -63,13 +63,12 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
   const router = useRouter();
 
   useEffect(() => {
-    // Mark as client-side after mounting
+ 
     setIsClient(true);
     
-    // Set up player when component mounts
     const player = playerRef.current;
     if (player) {
-      // When player is ready, start playing
+   
       const unsubscribe = player.subscribe(({ canPlay }) => {
         if (canPlay) {
           setTimeout(() => {
@@ -89,7 +88,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
     provider: MediaProviderAdapter | null,
     nativeEvent: MediaProviderChangeEvent,
   ) {
-    // We can configure provider's here.
+
     if (isHLSProvider(provider)) {
       provider.config = {};
     }
@@ -103,20 +102,20 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
   };
 
   const handlePlayClick = () => {
-    // Navigate to the video player page
+   
     router.push(`/watch/${id || '1'}?video=${encodeURIComponent(videoUrl)}`);
   };
 
   const handleMoreInfoClick = () => {
-    // Show the info modal
+
     setShowInfoModal(true);
-    // Pause the video when showing modal
+
     if (playerRef.current) {
       playerRef.current.pause();
     }
   };
 
-  // Don't render the player on the server side
+
   if (!isClient) {
     return (
       <div className="hero-banner">
@@ -195,9 +194,8 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
           <div className="hero-info-modal-content">
             <button className="hero-info-modal-close" onClick={() => {
               setShowInfoModal(false);
-              // Resume video playback when closing modal if player was previously playing
               if (playerRef.current && isPlaying) {
-                playerRef.current.play();
+              playerRef.current.play();
               }
             }}>
               <X size={24} />
