@@ -4,6 +4,8 @@ import './player.css';
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
+
 import {
   isHLSProvider,
   type MediaCanPlayDetail,
@@ -40,8 +42,9 @@ const DefaultVideoLayout = dynamic(
 );
 
 export function Player() {
+  const params = useParams();
   let player = useRef<MediaPlayerInstance>(null),
-    [src, setSrc] = useState('https://www.youtube.com/watch?v=urTfEEsGHds');
+    [src, setSrc] = useState(`https://www.youtube.com/watch?v=${params.id}`);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -49,12 +52,6 @@ export function Player() {
     setIsClient(true);
 
     // Subscribe to state updates.
-    if (player.current) {
-      return player.current.subscribe(({ paused, viewType }) => {
-        // console.log('is paused?', '->', paused);
-        // console.log('is audio view?', '->', viewType === 'audio');
-      });
-    }
   }, []);
 
   function onProviderChange(

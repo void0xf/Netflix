@@ -25,7 +25,8 @@ export default function CarouselItem({
 }: CarouselItemProps) {
   const router = useRouter();
   const navigateToUrl = () => {
-    router.push('/video/${videoUrl}');
+    const videoId = new URL(videoUrl).searchParams.get('v');
+    router.push(`/video/${videoId}`);
   };
 
   return (
