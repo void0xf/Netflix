@@ -5,12 +5,15 @@ import { auth, db } from "../../auth/firebase";
 import { useRouter } from "next/navigation";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { UserProfile} from "@/types/userProfile";
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 
 const AccountChoose = () => {
     const router = useRouter();
     // const [userProfile, setUserProfile] = useState<any>(null);
     const [accounts, setAccounts] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isManaging, setIsManaging] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,7 +26,8 @@ const AccountChoose = () => {
                         id: doc.id,
                         ...doc.data(),
                         nazwaKonta: doc.data().nazwaKonta ?? "Brak nazwy",
-                        ograniczenieDorosli: doc.data().ograniczenieDorosli ?? false
+                        ograniczenieDorosli: doc.data().ograniczenieDorosli ?? false,
+                        img_id: doc.data().img_id ?? '0'
                     })).reverse();
                     setAccounts(accList);
                 }
@@ -49,42 +53,111 @@ const AccountChoose = () => {
         router.push('/browse')
     };
 
-    const handleSettingsClick = () => {
-        router.push("/account/accsetingss");
+    const handleManageClick = (accountId: string) => {
+        router.push(`/account/accsetingss?id=${accountId}`);
+    };
+
+    const handleAddProfileClick = () => {
+        router.push('/account/accsetingss');
     };
 
     return (
-        <Box sx={{ height: "100vh", background: "black", p: 4, textAlign: "center", color: "white", pt: "18vw" }}>
-            <Typography variant="h4">Witaj!</Typography>
-            <Typography variant="h6" sx={{ mb: 4 }}>Wybierz konto:</Typography>
+        <Box sx={{ height: "100vh", background: "#111", p: 4, textAlign: "center", color: "white", pt: "10vw" }}>
+            <Typography variant="h2" sx={{ mb: 4 }}>
+                {isManaging ? 'Zarządzaj profilami:' : 'Kto Ogląda:'}
+            </Typography>
 
-            <Grid container spacing={3} justifyContent="center">
+            <Grid container spacing={3} justifyContent="center" alignItems="center">
                 {accounts.map(account => (
-                    <Grid  key={account.id} sx={{ textAlign: "center" }}>
-                        <Button
-                            onClick={() => handleAccountClick()}
-                            sx={{
-                                background: "orange",
-                                width: "120px",
-                                height: "120px",
-                                borderRadius: "12px",
-                                mb: 1
-                            }}
-                        />
-                        <Typography sx={{ mt: 1 }}>{account.nazwaKonta}</Typography>
+                    <Grid key={account.id}>
+                        <Box sx={{ textAlign: "center", m: 2 }}>
+                            <Button
+                                onClick={() => isManaging ? handleManageClick(account.id) : handleAccountClick()}
+                                sx={{
+                                    backgroundImage: `url('/profiles/${account.img_id}.png')`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    width: "120px",
+                                    height: "120px",
+                                    borderRadius: "12px",
+                                    mb: 1,
+                                    p: 0,
+                                    position: 'relative',
+                                    '&:hover': {
+                                        border: '2px solid white',
+                                    }
+                                }}
+                            >
+                                {isManaging && (
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            backgroundColor: 'rgba(0,0,0,0.5)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: "12px",
+                                        }}
+                                    >
+                                        <EditIcon sx={{ color: 'white', fontSize: 40 }} />
+                                    </Box>
+                                )}
+                            </Button>
+                            <Typography sx={{ mt: 1 }}>{account.nazwaKonta}</Typography>
+                        </Box>
                     </Grid>
                 ))}
+                {isManaging && (
+                    <Grid key="add-profile">
+                        <Box sx={{ textAlign: "center", m: 2 }}>
+                            <Button
+                                onClick={handleAddProfileClick}
+                                sx={{
+                                    width: "120px",
+                                    height: "120px",
+                                    borderRadius: "12px",
+                                    mb: 1,
+                                    border: '2px solid grey',
+                                    color: 'grey',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    '&:hover': {
+                                        border: '2px solid white',
+                                        color: 'white'
+                                    }
+                                }}
+                            >
+                                <AddIcon sx={{ fontSize: 50 }} />
+                            </Button>
+                            <Typography>Dodaj profil</Typography>
+                        </Box>
+                    </Grid>
+                )}
             </Grid>
-
-            <Box sx={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)" }}>
-                <img src="/logo-no-background.png" alt="Logo" style={{ height: 60 }} />
-            </Box>
-
-            <Box sx={{ position: "absolute", bottom: 26, left: "96%", display: "flex" }}>
-                <Button onClick={handleSettingsClick}>
-                    <img src="/settings.png" style={{ height: 30 }} />
-                </Button>
-            </Box>
+            <Button
+                variant="outlined"
+                onClick={() => setIsManaging(!isManaging)}
+                sx={{
+                    color: 'grey.500',
+                    borderColor: 'grey.500',
+                    mt: 5,
+                    px: 4,
+                    py: '6px',
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                    letterSpacing: '1px',
+                    '&:hover': {
+                        borderColor: 'white',
+                        color: 'white'
+                    }
+                }}
+            >
+                {isManaging ? 'Gotowe' : 'Zarządzaj profilami'}
+            </Button>
         </Box>
     );
 };
