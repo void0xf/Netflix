@@ -1,5 +1,6 @@
 export type Movie = {
-  id: number;
+  docId: string;
+  id: string;
   title: string;
   videoUrl: string;
   thumbnail: string;
