@@ -60,12 +60,12 @@ const AuthWindow = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#101010',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#101010",
         py: 4,
       }}
     >
@@ -77,11 +77,11 @@ const AuthWindow = () => {
           width: '40rem',
         }}
       >
-        <Box mb={4} display='flex' justifyContent='center'>
+        <Box mb={4} display="flex" justifyContent="center">
           <img
-            src='/logo-no-background.png'
-            alt='Logo'
-            style={{ height: 80 }}
+            src="/logo-no-background.png"
+            alt="Logo"
+            style={{ height: 50 }}
           />
         </Box>
 
