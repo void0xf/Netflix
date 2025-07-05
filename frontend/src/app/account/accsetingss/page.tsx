@@ -145,14 +145,14 @@ const AccountSettings = () => {
                             {availableAvatars.map(avatarId => (
                                 <Grid item key={avatarId} xs={4} sm={3} md={2}>
                                     <Button onClick={() => handleAvatarSelect(avatarId)} sx={{p: 0, borderRadius: 1}}>
-                                        <img src={`/profiles/${avatarId}.png`} alt={`avatar ${avatarId}`} style={{ width: '100%', borderRadius: '4px' }}/>
+                                        <img src={`/profiles/${avatarId}.png`} alt={`Avatar ${parseInt(avatarId) + 1}`} style={{ width: '100%', borderRadius: '4px' }}/>
                                     </Button>
                                 </Grid>
                             ))}
                         </Grid>
                     </Box>
                 ) : (
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} alignItems="center">
                         <Grid item xs={12} sm={4}>
                             <Box
                                 onClick={() => setShowAvatarSelection(true)}
@@ -166,7 +166,7 @@ const AccountSettings = () => {
                                     },
                                 }}
                             >
-                                <img src={`/profiles/${profileData.img_id}.png`} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <img src={`/profiles/${profileData.img_id}.png`} alt={profileData.nazwaKonta} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
                                 <Box
                                     className="edit-overlay"
                                     sx={{
@@ -190,27 +190,26 @@ const AccountSettings = () => {
                         </Grid>
 
                         <Grid item xs={12} sm={8}>
-                            <Box>
-                                <TextField
-                                    name="nazwaKonta"
-                                    value={profileData.nazwaKonta}
-                                    onChange={handleFieldChange}
-                                    variant="filled"
-                                    fullWidth
-                                    sx={{ backgroundColor: 'grey.800', borderRadius: 1, input: { color: 'white' } }}
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            name="ograniczenieDorosli"
-                                            checked={profileData.ograniczenieDorosli}
-                                            onChange={handleFieldChange}
-                                            sx={{ color: 'grey.500', '&.Mui-checked': { color: 'white' } }}
-                                        />
-                                    }
-                                    label="Dostęp do treści 18+"
-                                />
-                            </Box>
+                            <TextField
+                                name="nazwaKonta"
+                                label="Nazwa"
+                                value={profileData.nazwaKonta}
+                                onChange={handleFieldChange}
+                                variant="filled"
+                                fullWidth
+                                sx={{ backgroundColor: 'grey.800', borderRadius: 1, mb: 2, '& .MuiInputBase-input': { color: 'white' } }}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        name="ograniczenieDorosli"
+                                        checked={profileData.ograniczenieDorosli}
+                                        onChange={handleFieldChange}
+                                        sx={{ color: 'grey.500', '&.Mui-checked': { color: 'white' } }}
+                                    />
+                                }
+                                label="Profil dla dorosłych"
+                            />
                         </Grid>
                     </Grid>
                 )}
