@@ -1,6 +1,5 @@
 "use client"
 import Carousel from '@/components/ui/preview-carousel/carousel';
-import CarouselItem from '@/components/ui/preview-carousel/carousel-item';
 import Navbar from '@/features/browse/navbar';
 import Footer from '@/features/browse/footer';
 import React, { useEffect, useState } from 'react'
@@ -10,7 +9,99 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 
 import { Movie } from '@/types/movie';
+import CarouselItem from '@/components/ui/preview-carousel/carousel-item';
 
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
+export const trendingContent = [
+  {
+    id: 1,
+    title: "Dune: Part Two",
+    videoUrl: "1",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg",
+    provider: "netflix",
+    type: "movie",
+  },
+  {
+    id: 8,
+    title: "The Witcher",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/cZ0d3rtvXPVvuiX22sP79K3Hmjz.jpg",
+    provider: "netflix",
+    type: "tv",
+  },
+  {
+    id: 201,
+    title: "Breaking Bad",
+    thumbnail: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+    provider: "netflix",
+    type: "tv",
+    progress: 75,
+  },
+  {
+    id: 202,
+    title: "The Last of Us",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
+    provider: "netflix",
+    type: "tv",
+    progress: 40,
+  },
+  {
+    id: 203,
+    title: "Black Mirror",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/5UaYsGZOFhjFDwQh6GuLjjA1WlF.jpg",
+    provider: "netflix",
+    type: "tv",
+    progress: 90,
+    badge: "new",
+  },
+  {
+    id: 101,
+    title: "Squid Game",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
+    provider: "netflix",
+    type: "tv",
+    match: 97,
+  },
+  {
+    id: 104,
+    title: "Wednesday",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",
+    provider: "netflix",
+    type: "tv",
+    match: 94,
+  },
+  {
+    id: 105,
+    title: "Money Heist",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
+    provider: "netflix",
+    type: "tv",
+    match: 93,
+  },
+  {
+    id: 106,
+    title: "The Queen's Gambit",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg",
+    provider: "netflix",
+    type: "tv",
+    match: 98,
+  },
+];
 
 const HLS_DEMO_VIDEO = "https://customer-m033z5x00ks6nunl.cloudflarestream.com/b236bde30eb07b9d01318940e5fc3eda/manifest/video.m3u8";
 const AVATAR_DESCRIPTION = "Set in the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting the world he feels is his home.";
@@ -32,11 +123,15 @@ const Page = () => {
           id: doc.id,
           ...doc.data()
         })) as unknown as Movie[];
-        if (fetchedMovies.length > 0) {
-          setFeaturedItem(fetchedMovies[0]);
-          setTrendingContent(fetchedMovies.slice(0, 10))
-          setContinueWatching(fetchedMovies.slice(20, 30));
-          setNetflixOriginals(fetchedMovies.slice(30, 50)); 
+        
+        const shuffledMovies = shuffleArray(fetchedMovies);
+
+
+        if (shuffledMovies.length > 0) {
+          setFeaturedItem(shuffledMovies[0]);
+          setTrendingContent(shuffledMovies.slice(0, 10))
+          setContinueWatching(shuffledMovies.slice(20, 30));
+          setNetflixOriginals(shuffledMovies.slice(30, 50)); 
         }
         return fetchedMovies;
       } catch (error) {
@@ -45,8 +140,6 @@ const Page = () => {
     }
     fetchAllMovies();
   }, []);
-
-
 
   const heroBannerProps = featuredItem ? {
     id: featuredItem.id,
@@ -65,6 +158,7 @@ const Page = () => {
   return (
     <div className="netflix-font">
       <Navbar />
+
       <HeroBanner
         id={heroBannerProps.id}
         title={heroBannerProps.title}
@@ -74,20 +168,19 @@ const Page = () => {
       />
       <main className='bg-black text-white mx-20'>
         <Carousel title="Trending Now">
-          {trendingContent.map((item) => (
+          {trendingContent.map((item: Movie) => (
             <CarouselItem
               key={item.id}
               id={item.id}
               title={item.title}
               thumbnail={item.thumbnail}
               provider={item.provider}
-              // badge={item.badge}
             />
           ))}
         </Carousel>
 
         <Carousel title="Continue Watching" showTitleArrow={true}>
-          {continueWatching.map((item) => (
+          {continueWatching.map((item: Movie) => (
             <CarouselItem
               key={item.id}
               id={item.id}
@@ -96,17 +189,18 @@ const Page = () => {
               provider={item.provider}
             >
               <div className="mt-2 w-full bg-gray-600 h-1 rounded-full overflow-hidden">
-                <div 
-                  className="bg-red-600 h-full" 
-                  style={{ width: `${50}%` }}
+                <div
+                  className="bg-red-600 h-full"
+                  // style={{ width: `${(item as unknown as Movie).progress}%` }}
                 />
               </div>
             </CarouselItem>
           ))}
         </Carousel>
-        
-        <Carousel title="Netflix Originals" >
-          {netflixOriginals.map((item) => (
+
+        {/* Netflix Originals with match percentage */}
+        <Carousel title="Netflix Originals">
+          {netflixOriginals.map((item: Movie) => (
             <CarouselItem
               key={item.id}
               id={item.id}
@@ -121,9 +215,11 @@ const Page = () => {
           ))}
         </Carousel>
       </main>
+    <div>
       <Footer />
+    </div>  
     </div>
-  )
-}
+  );
+};
 
 export default Page;
