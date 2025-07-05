@@ -19,22 +19,19 @@ import {
 } from "@mui/material";
 import { sampleVideos } from "@/components/ui/preview-carousel/carousel";
 import { trendingContent } from "../browse/page";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForward from "@mui/icons-material/ArrowForwardIos";
-import { PlusOne } from "@mui/icons-material";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { accordionContent, features, footerLinks } from "./text";
 
 const MainPage = () => {
+  const carouselRef = useRef(null);
+  const router = useRouter();
   if (!Array.isArray(sampleVideos)) {
     console.error("sampleVideos is not an array:", sampleVideos);
     return <div>Error loading videos</div>;
   }
-  const carouselRef = useRef(null);
-  const router = useRouter();
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
       (carouselRef.current as HTMLDivElement).scrollLeft += scrollOffset;
@@ -282,6 +279,7 @@ const MainPage = () => {
         <Grid container spacing={4}>
           {features.map((feature, index) => (
             <Card
+              key={index}
               variant="outlined"
               sx={{
                 maxWidth: 250,
@@ -381,7 +379,7 @@ const MainPage = () => {
 
         <Grid container spacing={4}>
           {footerLinks.map((column, index) => (
-            <Box>
+            <Box key={index}>
               <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: "bold", mb: 2 }}
