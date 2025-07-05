@@ -1,29 +1,51 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Box, Typography, Button, Grid, TextField, FormControlLabel, Checkbox, CircularProgress } from "@mui/material";
+import { Box, Typography, Button, Grid, TextField, FormControlLabel, Checkbox, CircularProgress, Divider } from "@mui/material";
 import { auth, db } from "../../auth/firebase";
-import { useRouter } from "next/navigation";
-import { doc, getDoc, collection, getDocs, updateDoc } from "firebase/firestore";
+import { useRouter, useSearchParams } from "next/navigation";
+import { doc, getDoc, collection, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { UserProfile } from "@/types/userProfile";
+import EditIcon from '@mui/icons-material/Edit';
 
+const availableAvatars = Array.from({ length: 16 }, (_, i) => i.toString());
 
 const AccountSettings = () => {
     const router = useRouter();
-    const [user, setUser] = useState<any>(null);
-    const [userProfile, setUserProfile] = useState<any>(null);
-    const [accounts, setAccounts] = useState<any[]>([]);
+    const searchParams = useSearchParams();
+    const accountId = searchParams.get('id');
+
+    const [profileData, setProfileData] = useState<{
+        id?: string;
+        nazwaKonta: string;
+        ograniczenieDorosli: boolean;
+        img_id: string;
+    } | null>(null);
+
     const [loading, setLoading] = useState(true);
+    const [isNewProfile, setIsNewProfile] = useState(!accountId);
+    const [showAvatarSelection, setShowAvatarSelection] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const currentUser = auth.currentUser;
             if (currentUser) {
-                setUser(currentUser);
-                const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-                if (userDoc.exists()) {
-                    setUserProfile(userDoc.data());
-                    const accSnap = await getDocs(collection(db, "users", currentUser.uid, "accounts"));
-                    const accList = accSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    setAccounts(accList);
+                if (accountId) {
+                    setIsNewProfile(false);
+                    const accountDocRef = doc(db, "users", currentUser.uid, "accounts", accountId);
+                    const accountDoc = await getDoc(accountDocRef);
+                    if (accountDoc.exists()) {
+                        setProfileData({ id: accountDoc.id, ...accountDoc.data() } as UserProfile);
+                    } else {
+                        alert("Profil nie znaleziony.");
+                        router.push('/account/acchoose');
+                    }
+                } else {
+                    setIsNewProfile(true);
+                    setProfileData({
+                        nazwaKonta: '',
+                        ograniczenieDorosli: false,
+                        img_id: '0',
+                    });
                 }
                 setLoading(false);
             } else {
@@ -31,48 +53,76 @@ const AccountSettings = () => {
             }
         };
         fetchData();
-    }, [router]);
+    }, [accountId, router]);
 
-    const handleUpdateAccount = async (accountId: string, newAccountName: string, adultContent: boolean) => {
-        if (!newAccountName) {
-            alert("Podaj nowa nazwe konta");
+    const handleSave = async () => {
+        if (!profileData || !profileData.nazwaKonta) {
+            alert("Nazwa profilu nie może być pusta.");
             return;
         }
+        const currentUser = auth.currentUser;
+        if (!currentUser) return;
 
-        const accountRef = doc(db, "users", user?.uid, "accounts", accountId);
+        const dataToSave = {
+            nazwaKonta: profileData.nazwaKonta,
+            ograniczenieDorosli: profileData.ograniczenieDorosli,
+            img_id: profileData.img_id,
+        };
+
         try {
-            await updateDoc(accountRef, {
-                nazwaKonta: newAccountName,
-                ograniczenieDorosli: adultContent,
-            });
-            alert("Konto zaktualizowane!");
+            if (isNewProfile) {
+                await addDoc(collection(db, "users", currentUser.uid, "accounts"), dataToSave);
+                alert("Profil utworzony!");
+            } else {
+                const accountRef = doc(db, "users", currentUser.uid, "accounts", accountId!);
+                await updateDoc(accountRef, dataToSave);
+                alert("Profil zaktualizowany!");
+            }
+            router.push("/account/acchoose");
         } catch (error) {
-            console.error("Blad podczas aktualizacji konta: ", error);
-            alert("Cos poszlo nie tak!");
+            console.error("Błąd zapisu profilu: ", error);
+            alert("Wystąpił błąd podczas zapisywania profilu.");
         }
     };
 
-    const handleSettingsClick = () => {
+    const handleDelete = async () => {
+        if (isNewProfile || !accountId) return;
+        const currentUser = auth.currentUser;
+        if (!currentUser) return;
+
+        if (window.confirm("Czy na pewno chcesz usunąć ten profil?")) {
+            try {
+                const accountRef = doc(db, "users", currentUser.uid, "accounts", accountId);
+                await deleteDoc(accountRef);
+                alert("Profil usunięty.");
+                router.push("/account/acchoose");
+            } catch (error) {
+                console.error("Błąd podczas usuwania profilu: ", error);
+                alert("Wystąpił błąd podczas usuwania profilu.");
+            }
+        }
+    };
+
+    const handleCancel = () => {
         router.push("/account/acchoose");
     };
 
-    const handleAccountNameChange = (e: React.ChangeEvent<HTMLInputElement>, accountId: string) => {
-        setAccounts(prevAccounts =>
-            prevAccounts.map(account =>
-                account.id === accountId ? { ...account, nazwaKonta: e.target.value } : account
-            )
-        );
+    const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!profileData) return;
+        const { name, value, checked, type } = e.target;
+        setProfileData({
+            ...profileData,
+            [name]: type === 'checkbox' ? checked : value,
+        });
     };
+    
+    const handleAvatarSelect = (img_id: string) => {
+        if (!profileData) return;
+        setProfileData({ ...profileData, img_id });
+        setShowAvatarSelection(false);
+    }
 
-    const handleAdultContentChange = (accountId: string) => {
-        setAccounts(prevAccounts =>
-            prevAccounts.map(account =>
-                account.id === accountId ? { ...account, ograniczenieDorosli: !account.ograniczenieDorosli } : account
-            )
-        );
-    };
-
-    if (loading) {
+    if (loading || !profileData) {
         return (
             <Box sx={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: "black" }}>
                 <CircularProgress color="inherit" />
@@ -80,68 +130,100 @@ const AccountSettings = () => {
         );
     }
 
-    if (!user || !userProfile) return null;
-
     return (
-        <Box sx={{ minHeight: "100vh",  background: "black", p: 4, pt:10, textAlign: "center", color: "white" }}>
-            
-            <Typography variant="h6" sx={{ mb: 4 }}>Zarzadzaj swoimi kontami:</Typography>
+        <Box sx={{ minHeight: "100vh", background: "#111", color: "white", p: 4 }}>
+            <Box sx={{ maxWidth: '800px', mx: 'auto' }}>
+                <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
+                    {isNewProfile ? 'Dodaj profil' : 'Edytuj profil'}
+                </Typography>
+                <Divider sx={{ backgroundColor: 'grey.700', mb: 4 }} />
 
-            <Grid container spacing={3} justifyContent="center">
-                {accounts.map(account => (
-                    <Grid  key={account.id} sx={{ textAlign: "center" }}>
-                        <Box
-                            sx={{
-                                background: "orange",
-                                width: "120px",
-                                height: "120px",
-                                borderRadius: "12px",
-                                marginBottom: 1,
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        />
-                        <Typography sx={{ mt: 1 }}>{account.nazwaKonta}</Typography>
+                {showAvatarSelection ? (
+                    <Box>
+                        <Typography variant="h5" sx={{mb: 2}}>Wybierz ikonę</Typography>
+                        <Grid container spacing={2}>
+                            {availableAvatars.map(avatarId => (
+                                <Grid item key={avatarId} xs={4} sm={3} md={2}>
+                                    <Button onClick={() => handleAvatarSelect(avatarId)} sx={{p: 0, borderRadius: 1}}>
+                                        <img src={`/profiles/${avatarId}.png`} alt={`avatar ${avatarId}`} style={{ width: '100%', borderRadius: '4px' }}/>
+                                    </Button>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                ) : (
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} sm={4}>
+                            <Box
+                                onClick={() => setShowAvatarSelection(true)}
+                                sx={{
+                                    position: 'relative',
+                                    width: '150px',
+                                    height: '150px',
+                                    cursor: 'pointer',
+                                    '&:hover .edit-overlay': {
+                                        opacity: 1,
+                                    },
+                                }}
+                            >
+                                <img src={`/profiles/${profileData.img_id}.png`} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <Box
+                                    className="edit-overlay"
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundColor: 'rgba(0,0,0,0.5)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        opacity: 0,
+                                        transition: 'opacity 0.3s ease',
+                                        borderRadius: '4px',
+                                    }}
+                                >
+                                    <EditIcon sx={{ color: 'white', fontSize: 60 }} />
+                                </Box>
+                            </Box>
+                        </Grid>
 
-                        <TextField
-                            label="Nowa nazwa konta"
-                            value={account.nazwaKonta}
-                            onChange={(e) => handleAccountNameChange(e, account.id)}
-                            sx={{ mt: 2, mb: 1, width: "20vw", backgroundColor: "white", borderRadius:3  }}
-                            variant="filled"
-                        />
-
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={account.odgraniczenieDorosli}
-                                    onChange={() => handleAdultContentChange(account.id)}
-                                    color="primary"
-                                    sx={{ backgroundColor: "white" , margin:3}}
-                                    
+                        <Grid item xs={12} sm={8}>
+                            <Box>
+                                <TextField
+                                    name="nazwaKonta"
+                                    value={profileData.nazwaKonta}
+                                    onChange={handleFieldChange}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{ backgroundColor: 'grey.800', borderRadius: 1, input: { color: 'white' } }}
                                 />
-                            }
-                            label="Konto 18+"
-                        />
-
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 2, backgroundColor: "orange", textTransform: "none" }}
-                            onClick={() => handleUpdateAccount(account.id, account.nazwaKonta, account.ograniczenieDorosli)}
-                        >
-                            Zaktualizuj
-                        </Button>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            name="ograniczenieDorosli"
+                                            checked={profileData.ograniczenieDorosli}
+                                            onChange={handleFieldChange}
+                                            sx={{ color: 'grey.500', '&.Mui-checked': { color: 'white' } }}
+                                        />
+                                    }
+                                    label="Dostęp do treści 18+"
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
-                ))}
-            </Grid>
+                )}
 
-            
+                <Divider sx={{ backgroundColor: 'grey.700', my: 4 }} />
 
-            <Box sx={{ position: "absolute", bottom: 16, right: 16 }}>
-                <Button onClick={handleSettingsClick}>
-                    <img src="/settings.png" style={{ height: 30, color: "white" }} />
-                </Button>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button onClick={handleSave} variant="contained" sx={{ backgroundColor: 'white', color: 'black', '&:hover': { backgroundColor: 'lightgrey'} }}>Zapisz</Button>
+                    <Button onClick={handleCancel} variant="outlined" sx={{ color: 'grey.500', borderColor: 'grey.500', '&:hover': { color: 'white', borderColor: 'white' } }}>Anuluj</Button>
+                    {!isNewProfile && (
+                        <Button onClick={handleDelete} variant="outlined" sx={{ color: 'grey.500', borderColor: 'grey.500', '&:hover': { color: 'white', borderColor: 'white' } }}>Usuń Profil</Button>
+                    )}
+                </Box>
             </Box>
         </Box>
     );
