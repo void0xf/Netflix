@@ -18,7 +18,6 @@ import {
   Link,
 } from "@mui/material";
 import { sampleVideos } from "@/components/ui/preview-carousel/carousel";
-import { trendingContent } from "../browse/page";
 import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForward from "@mui/icons-material/ArrowForwardIos";
 import { PlusIcon } from "lucide-react";
@@ -206,7 +205,7 @@ const MainPage = () => {
                 "&::-webkit-scrollbar": { display: "none" },
               }}
             >
-              {trendingContent.map((video, index) => (
+              {sampleVideos.map((video, index) => (
                 <Box
                   key={index}
                   sx={{
