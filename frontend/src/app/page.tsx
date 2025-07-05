@@ -23,6 +23,7 @@ import ArrowForward from '@mui/icons-material/ArrowForwardIos';
 import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { accordionContent, features, footerLinks } from './text';
+import { filmsData } from './data/films';
 
 const MainPage = () => {
   const carouselRef = useRef(null);
@@ -193,57 +194,58 @@ const MainPage = () => {
             <ArrowBack />
           </IconButton>
           <Box sx={{ position: 'relative' }}>
-            <Box
-              ref={carouselRef}
-              sx={{
-                display: 'flex',
-                overflowX: 'auto',
-                scrollSnapType: 'x mandatory',
-                gap: 2,
-                px: 5,
-                scrollBehavior: 'smooth',
-                '&::-webkit-scrollbar': { display: 'none' },
-              }}
-            >
-              {sampleVideos.map((video, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    flex: '0 0 auto',
-                    scrollSnapAlign: 'start',
-                    width: '12rem',
-                  }}
-                >
-                  <Card
+            <Box sx={{ position: 'relative' }}>
+              <Box
+                ref={carouselRef}
+                sx={{
+                  display: 'flex',
+                  overflowX: 'auto',
+                  scrollSnapType: 'x mandatory',
+                  gap: 2,
+                  px: 5,
+                  scrollBehavior: 'smooth',
+                  '&::-webkit-scrollbar': { display: 'none' },
+                }}
+              >
+                {filmsData.map((video: Video) => (
+                  <Box
                     sx={{
-                      backgroundColor: 'transparent',
-                      boxShadow: 'none',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
+                      flex: '0 0 auto',
+                      scrollSnapAlign: 'start',
+                      width: '12rem',
                     }}
                   >
-                    <img
-                      src={video.thumbnail}
-                      alt={video.title}
-                      style={{
-                        width: '100%',
-                        borderRadius: '4px',
+                    <Card
+                      sx={{
+                        backgroundColor: 'transparent',
+                        boxShadow: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                       }}
-                    />
-                    <CardContent sx={{ padding: 1 }}>
-                      <Typography
-                        variant='body1'
-                        color='white'
-                        align='center'
-                        noWrap
-                      >
-                        {video.title}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))}
+                    >
+                      <img
+                        src={video.image_url}
+                        alt={video.title}
+                        style={{
+                          width: '100%',
+                          borderRadius: '4px',
+                        }}
+                      />
+                      <CardContent sx={{ padding: 1 }}>
+                        <Typography
+                          variant='body1'
+                          color='white'
+                          align='center'
+                          noWrap
+                        >
+                          {video.title}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                ))}
+              </Box>
             </Box>
           </Box>
           <IconButton
@@ -429,3 +431,10 @@ const MainPage = () => {
 };
 
 export default MainPage;
+
+interface Video {
+  title: string;
+  image_url: string;
+  year?: number;
+  tmdb_id?: number;
+}
