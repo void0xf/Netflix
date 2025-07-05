@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import './player.css';
 
@@ -13,9 +13,7 @@ import {
   type MediaProviderChangeEvent,
 } from '@vidstack/react';
 
-import {
-  defaultLayoutIcons,
-} from '@vidstack/react/player/layouts/default';
+import { defaultLayoutIcons } from '@vidstack/react/player/layouts/default';
 
 // Use dynamic imports with ssr: false to prevent hydration errors
 const MediaPlayer = dynamic(
@@ -34,7 +32,10 @@ const Poster = dynamic(
 );
 
 const DefaultVideoLayout = dynamic(
-  () => import('@vidstack/react/player/layouts/default').then((mod) => mod.DefaultVideoLayout),
+  () =>
+    import('@vidstack/react/player/layouts/default').then(
+      (mod) => mod.DefaultVideoLayout
+    ),
   { ssr: false }
 );
 
@@ -58,7 +59,7 @@ export function Player() {
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
-    nativeEvent: MediaProviderChangeEvent,
+    nativeEvent: MediaProviderChangeEvent
   ) {
     // We can configure provider's here.
     if (isHLSProvider(provider)) {
@@ -67,20 +68,23 @@ export function Player() {
   }
 
   // We can listen for the `can-play` event to be notified when the player is ready.
-  function onCanPlay(detail: MediaCanPlayDetail, nativeEvent: MediaCanPlayEvent) {
+  function onCanPlay(
+    detail: MediaCanPlayDetail,
+    nativeEvent: MediaCanPlayEvent
+  ) {
     // ...
   }
 
   // Don't render the player on the server side
   if (!isClient) {
-    return <div className="player-loading">Loading player...</div>;
+    return <div className='player-loading'>Loading player...</div>;
   }
 
   return (
-    <div className="player-container">
+    <div className='player-container'>
       <MediaPlayer
-        className="player"
-        title="Sprite Fight"
+        className='player'
+        title='Sprite Fight'
         src={src}
         crossOrigin
         playsInline
@@ -97,10 +101,7 @@ export function Player() {
         </MediaProvider>
 
         {/* Layouts */}
-        <DefaultVideoLayout
-          icons={defaultLayoutIcons}
-          thumbnails=""
-        />
+        <DefaultVideoLayout icons={defaultLayoutIcons} thumbnails='' />
       </MediaPlayer>
     </div>
   );

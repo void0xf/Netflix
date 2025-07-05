@@ -1,10 +1,8 @@
-import { Player } from '@/components/ui/player/player'
-import React from 'react'
+import { Player } from '@/components/ui/player/player';
+import React from 'react';
 
 const Page = () => {
-  return (
-   <Player />
-  )
-}
+  return <Player />;
+};
 
-export default Page
+export default Page;
