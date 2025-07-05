@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Typography, Container, Tabs, Tab, Stack } from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 import { grey } from "@mui/material/colors"; // Add pink for tab colors
 import SignUp from "../signUp/page";
-import svgBackground from "../authPage/svgBackground.svg";
 import Login from "../login/page";
 interface TabPanelProps {
   children?: React.ReactNode;
