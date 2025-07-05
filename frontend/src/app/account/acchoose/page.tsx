@@ -49,8 +49,9 @@ const AccountChoose = () => {
 
     // if (!user || !userProfile) return null;
 
-    const handleAccountClick = () => {
-        router.push('/browse')
+    const handleAccountClick = (account: UserProfile) => {
+        localStorage.setItem('selectedProfile', JSON.stringify(account));
+        router.push('/browse');
     };
 
     const handleManageClick = (accountId: string) => {
@@ -72,7 +73,7 @@ const AccountChoose = () => {
                     <Grid key={account.id}>
                         <Box sx={{ textAlign: "center", m: 2 }}>
                             <Button
-                                onClick={() => isManaging ? handleManageClick(account.id) : handleAccountClick()}
+                                onClick={() => isManaging ? handleManageClick(account.id) : handleAccountClick(account)}
                                 sx={{
                                     backgroundImage: `url('/profiles/${account.img_id}.png')`,
                                     backgroundSize: 'cover',
