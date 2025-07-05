@@ -28,11 +28,6 @@ const MediaProvider = dynamic(
   { ssr: false }
 );
 
-const Poster = dynamic(
-  () => import('@vidstack/react').then((mod) => mod.Poster),
-  { ssr: false }
-);
-
 const DefaultVideoLayout = dynamic(
   () =>
     import('@vidstack/react/player/layouts/default').then(
@@ -43,8 +38,8 @@ const DefaultVideoLayout = dynamic(
 
 export function Player() {
   const params = useParams();
-  let player = useRef<MediaPlayerInstance>(null),
-    [src, setSrc] = useState(`https://www.youtube.com/watch?v=${params.id}`);
+  const player = useRef<MediaPlayerInstance>(null);
+  const src = `https://www.youtube.com/watch?v=${params.id}`;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -62,6 +57,7 @@ export function Player() {
     if (isHLSProvider(provider)) {
       provider.config = {};
     }
+    console.log(nativeEvent.type);
   }
 
   // We can listen for the `can-play` event to be notified when the player is ready.
@@ -69,7 +65,7 @@ export function Player() {
     detail: MediaCanPlayDetail,
     nativeEvent: MediaCanPlayEvent
   ) {
-    // ...
+    console.log(detail.duration, nativeEvent.type);
   }
 
   // Don't render the player on the server side

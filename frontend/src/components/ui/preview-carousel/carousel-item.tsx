@@ -5,28 +5,40 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export interface CarouselItemProps {
-  id?: number | string;
   title: string;
   thumbnail: string;
-  provider?: string;
   badge?: string;
   children?: React.ReactNode;
   videoUrl?: string;
 }
 
 export default function CarouselItem({
-  id,
   title,
   thumbnail,
-  provider,
   badge,
   children,
   videoUrl,
 }: CarouselItemProps) {
   const router = useRouter();
   const navigateToUrl = () => {
-    const videoId = new URL(videoUrl).searchParams.get('v');
-    router.push(`/video/${videoId}`);
+    if (!videoUrl) {
+      console.error('No videoUrl provided to CarouselItem');
+      return;
+    }
+    try {
+      const videoId = new URL(videoUrl).searchParams.get('v');
+      if (videoId) {
+        router.push(`/video/${videoId}`);
+      } else {
+        console.error('Could not extract videoId from URL:', videoUrl);
+      }
+    } catch (error) {
+      console.error(
+        'Invalid videoUrl provided to CarouselItem:',
+        videoUrl,
+        error
+      );
+    }
   };
 
   return (

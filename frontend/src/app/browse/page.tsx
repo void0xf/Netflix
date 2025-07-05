@@ -117,10 +117,8 @@ const Page = () => {
           {trendingContent.map((item: Movie) => (
             <CarouselItem
               key={item.id}
-              id={item.id}
               title={item.title}
               thumbnail={item.thumbnail}
-              provider={item.provider}
               videoUrl={item.videoUrl}
             />
           ))}
@@ -130,10 +128,8 @@ const Page = () => {
           {continueWatching.map((item: Movie) => (
             <CarouselItem
               key={item.id}
-              id={item.id}
               title={item.title}
               thumbnail={item.thumbnail}
-              provider={item.provider}
               videoUrl={item.videoUrl}
             >
               <div className='mt-2 w-full bg-gray-600 h-1 rounded-full overflow-hidden'>
@@ -151,10 +147,8 @@ const Page = () => {
           {netflixOriginals.map((item: Movie) => (
             <CarouselItem
               key={item.id}
-              id={item.id}
               title={item.title}
               thumbnail={item.thumbnail}
-              provider={item.provider}
               videoUrl={item.videoUrl}
             >
               <div className='mt-1 text-xs text-green-500 font-medium'>
