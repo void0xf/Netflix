@@ -1,38 +1,43 @@
-"use client"
+"use client";
 
-import { useState, useRef, ReactNode } from "react"
-import { ChevronRight } from "lucide-react"
+import { useState, useRef, ReactNode } from "react";
+import { ChevronRight } from "lucide-react";
 
 interface CarouselProps {
-  title?: string
-  children: ReactNode
-  showTitleArrow?: boolean
+  title?: string;
+  children: ReactNode;
+  showTitleArrow?: boolean;
 }
 
-export default function Carousel({ title, children, showTitleArrow = false }: CarouselProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [showLeftArrow, setShowLeftArrow] = useState(false)
-  const [showRightArrow, setShowRightArrow] = useState(true)
+export default function Carousel({
+  title,
+  children,
+  showTitleArrow = false,
+}: CarouselProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 600, behavior: "smooth" })
+      scrollContainerRef.current.scrollBy({ left: 600, behavior: "smooth" });
     }
-  }
+  };
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -600, behavior: "smooth" })
+      scrollContainerRef.current.scrollBy({ left: -600, behavior: "smooth" });
     }
-  }
+  };
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-      setShowLeftArrow(scrollLeft > 0)
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10)
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
     }
-  }
+  };
 
   return (
     <div className="relative w-full max-w-full overflow-hidden">
@@ -59,7 +64,7 @@ export default function Carousel({ title, children, showTitleArrow = false }: Ca
           ref={scrollContainerRef}
           className="flex gap-2 overflow-x-scroll no-scrollbar snap-x"
           onScroll={handleScroll}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {children}
         </div>
@@ -75,7 +80,7 @@ export default function Carousel({ title, children, showTitleArrow = false }: Ca
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export const sampleVideos = [
@@ -129,4 +134,4 @@ export const sampleVideos = [
     thumbnail: "/placeholder.svg?height=180&width=320",
     provider: "netflix",
   },
-]
+];
