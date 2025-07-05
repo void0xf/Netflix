@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { Play, Info, Volume2, VolumeX, X } from 'lucide-react';
@@ -43,17 +43,17 @@ interface HeroBannerProps {
   duration?: string;
 }
 
-const HeroBanner: React.FC<HeroBannerProps> = ({ 
-  title, 
-  description, 
-  videoUrl, 
+const HeroBanner: React.FC<HeroBannerProps> = ({
+  title,
+  description,
+  videoUrl,
   thumbnailUrl,
   logoUrl,
   id = '',
   genre = 'Action • Adventure • Sci-Fi',
   year = '2022',
   rating = 'PG-13',
-  duration = '2h 35m'
+  duration = '2h 35m',
 }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -65,7 +65,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
   useEffect(() => {
     // Mark as client-side after mounting
     setIsClient(true);
-    
+
     // Set up player when component mounts
     const player = playerRef.current;
     if (player) {
@@ -78,7 +78,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
           }, 300);
         }
       });
-      
+
       return () => {
         unsubscribe();
       };
@@ -87,7 +87,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
-    nativeEvent: MediaProviderChangeEvent,
+    nativeEvent: MediaProviderChangeEvent
   ) {
     // We can configure provider's here.
     if (isHLSProvider(provider)) {
@@ -119,29 +119,29 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
   // Don't render the player on the server side
   if (!isClient) {
     return (
-      <div className="hero-banner">
-        <div 
-          className="hero-thumbnail"
+      <div className='hero-banner'>
+        <div
+          className='hero-thumbnail'
           style={{ backgroundImage: `url(${thumbnailUrl})` }}
         />
-        <div className="hero-overlay" />
-        <div className="hero-content">
+        <div className='hero-overlay' />
+        <div className='hero-content'>
           {logoUrl ? (
-            <img src={logoUrl} alt={title} className="hero-logo" />
+            <img src={logoUrl} alt={title} className='hero-logo' />
           ) : (
-            <h1 className="hero-title">{title}</h1>
+            <h1 className='hero-title'>{title}</h1>
           )}
-          <p className="hero-description">{description}</p>
+          <p className='hero-description'>{description}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="hero-banner">
-      <div className="hero-player-wrapper">
+    <div className='hero-banner'>
+      <div className='hero-player-wrapper'>
         <MediaPlayer
-          className="hero-media-player"
+          className='hero-media-player'
           ref={playerRef}
           src={videoUrl}
           muted={isMuted}
@@ -152,86 +152,93 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
           crossOrigin
         >
           <MediaProvider />
-          
-          <Poster
-            className="vds-poster"
-            src={thumbnailUrl}
-            alt={title}
-          />
-          
+
+          <Poster className='vds-poster' src={thumbnailUrl} alt={title} />
+
           {/* We don't need default controls for hero banner */}
-          <div className="hero-overlay" />
+          <div className='hero-overlay' />
         </MediaPlayer>
       </div>
 
       {/* Content */}
-      <div className="hero-content">
+      <div className='hero-content'>
         {logoUrl ? (
-          <img src={logoUrl} alt={title} className="hero-logo" />
+          <img src={logoUrl} alt={title} className='hero-logo' />
         ) : (
-          <h1 className="hero-title">{title}</h1>
+          <h1 className='hero-title'>{title}</h1>
         )}
-        
-        <p className="hero-description">{description}</p>
-        
-        <div className="hero-buttons">
-          <button className="hero-button play-button" onClick={handlePlayClick}>
+
+        <p className='hero-description'>{description}</p>
+
+        <div className='hero-buttons'>
+          <button className='hero-button play-button' onClick={handlePlayClick}>
             <Play size={20} /> Play
           </button>
-          <button className="hero-button info-button" onClick={handleMoreInfoClick}>
+          <button
+            className='hero-button info-button'
+            onClick={handleMoreInfoClick}
+          >
             <Info size={20} /> More Info
           </button>
         </div>
       </div>
 
       {/* Volume toggle button */}
-      <button className="volume-toggle" onClick={toggleMute}>
+      <button className='volume-toggle' onClick={toggleMute}>
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
       </button>
 
       {/* Info Modal */}
       {showInfoModal && (
-        <div className="hero-info-modal">
-          <div className="hero-info-modal-content">
-            <button className="hero-info-modal-close" onClick={() => {
-              setShowInfoModal(false);
-              // Resume video playback when closing modal if player was previously playing
-              if (playerRef.current && isPlaying) {
-                playerRef.current.play();
-              }
-            }}>
+        <div className='hero-info-modal'>
+          <div className='hero-info-modal-content'>
+            <button
+              className='hero-info-modal-close'
+              onClick={() => {
+                setShowInfoModal(false);
+                // Resume video playback when closing modal if player was previously playing
+                if (playerRef.current && isPlaying) {
+                  playerRef.current.play();
+                }
+              }}
+            >
               <X size={24} />
             </button>
 
-            <div className="hero-info-modal-header">
-              <div 
-                className="hero-info-modal-backdrop"
+            <div className='hero-info-modal-header'>
+              <div
+                className='hero-info-modal-backdrop'
                 style={{ backgroundImage: `url(${thumbnailUrl})` }}
               />
 
-              <div className="hero-info-modal-title-area">
+              <div className='hero-info-modal-title-area'>
                 {logoUrl ? (
-                  <img src={logoUrl} alt={title} className="hero-logo" />
+                  <img src={logoUrl} alt={title} className='hero-logo' />
                 ) : (
-                  <h1 className="hero-title">{title}</h1>
+                  <h1 className='hero-title'>{title}</h1>
                 )}
-                
-                <div className="hero-info-meta">
-                  <span className="hero-info-year">{year}</span>
-                  <span className="hero-info-rating">{rating}</span>
-                  <span className="hero-info-duration">{duration}</span>
+
+                <div className='hero-info-meta'>
+                  <span className='hero-info-year'>{year}</span>
+                  <span className='hero-info-rating'>{rating}</span>
+                  <span className='hero-info-duration'>{duration}</span>
                 </div>
-                
-                <button className="hero-button play-button play-button-large" onClick={handlePlayClick}>
+
+                <button
+                  className='hero-button play-button play-button-large'
+                  onClick={handlePlayClick}
+                >
                   <Play size={24} /> Play
                 </button>
               </div>
             </div>
-            
-            <div className="hero-info-modal-body">
-              <p className="hero-info-description">{description}</p>
-              <div className="hero-info-details">
-                <p><span className="hero-info-label">Genres:</span> {genre}</p>
+
+            <div className='hero-info-modal-body'>
+              <p className='hero-info-description'>{description}</p>
+              <div className='hero-info-details'>
+                <p>
+                  <span className='hero-info-label'>Genres:</span> {genre}
+                </p>
               </div>
             </div>
           </div>
@@ -241,4 +248,4 @@ const HeroBanner: React.FC<HeroBannerProps> = ({
   );
 };
 
-export default HeroBanner; 
+export default HeroBanner;

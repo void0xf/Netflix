@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
-import { grey } from "@mui/material/colors"; // Add pink for tab colors
-import SignUp from "../signUp/page";
-import Login from "../login/page";
+import { useState } from 'react';
+import { Box, Tabs, Tab } from '@mui/material';
+import { grey } from '@mui/material/colors'; // Add pink for tab colors
+import SignUp from '../signUp/page';
+import Login from '../login/page';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -15,7 +15,7 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -28,16 +28,16 @@ function TabPanel(props: TabPanelProps) {
 
 const AuthWindow = () => {
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const [registerData, setRegisterData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -73,8 +73,8 @@ const AuthWindow = () => {
         sx={{
           p: 4,
           borderRadius: 2,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          width: "40rem",
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          width: '40rem',
         }}
       >
         <Box mb={4} display="flex" justifyContent="center">
@@ -88,30 +88,30 @@ const AuthWindow = () => {
         <Tabs
           value={value}
           onChange={(event, newValue) => setValue(newValue)}
-          textColor="inherit"
-          indicatorColor="primary"
-          aria-label="Auth tabs"
+          textColor='inherit'
+          indicatorColor='primary'
+          aria-label='Auth tabs'
           sx={{
-            "--Tab-indicatorThickness": "3px",
-            "--Tab-indicatorRadius": "4px",
-            "& .MuiTabs-indicator": { backgroundColor: "red" },
-            "& .MuiTab-root": { color: "grey" },
-            "& .Mui-selected": { color: "red" },
+            '--Tab-indicatorThickness': '3px',
+            '--Tab-indicatorRadius': '4px',
+            '& .MuiTabs-indicator': { backgroundColor: 'red' },
+            '& .MuiTab-root': { color: 'grey' },
+            '& .Mui-selected': { color: 'red' },
           }}
         >
           <Tab
             sx={{
-              width: "50%",
+              width: '50%',
               color: grey[400],
             }}
-            label="Logowanie"
+            label='Logowanie'
           />
           <Tab
             sx={{
-              width: "50%",
+              width: '50%',
               color: grey[400],
             }}
-            label="Rejestracja"
+            label='Rejestracja'
           />
         </Tabs>
 

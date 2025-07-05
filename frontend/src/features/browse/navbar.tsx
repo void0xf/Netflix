@@ -78,7 +78,7 @@ const Navbar = () => {
     >
       <div className="flex items-center justify-between mx-8 md:px-10 py-4">
         {/* Left section - Logo and Navigation */}
-        <div className="flex items-center space-x-8">
+        <div className='flex items-center space-x-8'>
           {/* Netflix Logo */}
           <Link href="/browse" className="cursor-pointer">
             <img
@@ -142,7 +142,7 @@ const Navbar = () => {
               alt="Profile"
               width={32}
               height={32}
-              className="rounded-sm h-8 w-8 object-cover"
+              className='rounded-sm h-8 w-8 object-cover'
             />
             <ChevronDown className="h-4 w-4 text-white group-hover:rotate-180 transition duration-300" />
 

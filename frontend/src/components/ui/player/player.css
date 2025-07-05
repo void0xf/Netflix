@@ -30,10 +30,7 @@
   height: 10vh;
 }
 
-
-
 /* Ensure tooltips and menus don't overflow */
-
 
 .player[data-view-type='audio'] .vds-poster {
   display: none;
@@ -52,7 +49,6 @@
   margin-inline: auto;
   max-width: 300px;
 }
-
 
 .player-loading {
   /* aspect-ratio: 16 /9; */

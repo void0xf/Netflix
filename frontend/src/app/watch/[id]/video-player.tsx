@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useRef } from 'react';
 import {
@@ -10,7 +10,10 @@ import {
   type MediaProviderChangeEvent,
 } from '@vidstack/react';
 
-import { DefaultVideoLayout, defaultLayoutIcons } from '@vidstack/react/player/layouts/default';
+import {
+  DefaultVideoLayout,
+  defaultLayoutIcons,
+} from '@vidstack/react/player/layouts/default';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -27,7 +30,7 @@ export default function VideoPlayer({ videoId, videoUrl }: VideoPlayerProps) {
       const unsubscribe = player.subscribe(({ paused }) => {
         // You can track player state here
       });
-      
+
       return () => {
         unsubscribe();
       };
@@ -36,7 +39,7 @@ export default function VideoPlayer({ videoId, videoUrl }: VideoPlayerProps) {
 
   function onProviderChange(
     provider: MediaProviderAdapter | null,
-    nativeEvent: MediaProviderChangeEvent,
+    nativeEvent: MediaProviderChangeEvent
   ) {
     // We can configure provider's here.
     if (isHLSProvider(provider)) {
@@ -46,7 +49,7 @@ export default function VideoPlayer({ videoId, videoUrl }: VideoPlayerProps) {
 
   return (
     <MediaPlayer
-      className="w-full h-full"
+      className='w-full h-full'
       title={`Video ${videoId}`}
       src={videoUrl}
       crossOrigin
@@ -59,4 +62,4 @@ export default function VideoPlayer({ videoId, videoUrl }: VideoPlayerProps) {
       <DefaultVideoLayout icons={defaultLayoutIcons} />
     </MediaPlayer>
   );
-} 
+}
