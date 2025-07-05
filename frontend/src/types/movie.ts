@@ -15,4 +15,6 @@ export type Movie = {
     | "fantasy"
     | "animation";
   isNew: boolean;
+  progress?: number;
+  match?: number;
 };
