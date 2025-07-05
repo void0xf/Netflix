@@ -41,7 +41,7 @@ const AuthWindow = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [value, setValue] = useState(0); 
+  const [value, setValue] = useState(0);
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,23 +53,22 @@ const AuthWindow = () => {
     setRegisterData((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-      <Box
-          sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: "100vh",
-              backgroundColor: "#101010",
-              py: 4,
-          }}
-      >
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#101010",
+        py: 4,
+      }}
+    >
       <Box
         sx={{
           p: 4,
@@ -77,11 +76,14 @@ const AuthWindow = () => {
           backgroundColor: "rgba(0,0,0,0.5)",
           width: "40rem",
         }}
-          >
+      >
         <Box mb={4} display="flex" justifyContent="center">
-             <img src="/logo-no-background.png" alt="Logo" style={{ height: 80 }} />
+          <img
+            src="/logo-no-background.png"
+            alt="Logo"
+            style={{ height: 50 }}
+          />
         </Box>
-        
 
         <Tabs
           value={value}
@@ -116,9 +118,9 @@ const AuthWindow = () => {
         <TabPanel value={value} index={0}>
           <Login />
         </TabPanel>
-              <TabPanel value={value} index={1}>
-                  <SignUp />
-              </TabPanel>
+        <TabPanel value={value} index={1}>
+          <SignUp />
+        </TabPanel>
       </Box>
     </Box>
   );
