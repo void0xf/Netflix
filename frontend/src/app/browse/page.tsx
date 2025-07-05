@@ -11,6 +11,17 @@ import { db } from '../auth/firebase';
 import { Movie } from '@/types/movie';
 import CarouselItem from '@/components/ui/preview-carousel/carousel-item';
 
+function pseudoRandom(seed: string): number {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0; // Convert to 32bit integer
+  }
+  hash = Math.abs(hash);
+  return (hash % 1000) / 1000;
+}
+
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
@@ -20,88 +31,6 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray;
 }
 
-export const trendingContent = [
-  {
-    id: 1,
-    title: "Dune: Part Two",
-    videoUrl: "1",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg",
-    provider: "netflix",
-    type: "movie",
-  },
-  {
-    id: 8,
-    title: "The Witcher",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/cZ0d3rtvXPVvuiX22sP79K3Hmjz.jpg",
-    provider: "netflix",
-    type: "tv",
-  },
-  {
-    id: 201,
-    title: "Breaking Bad",
-    thumbnail: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-    provider: "netflix",
-    type: "tv",
-    progress: 75,
-  },
-  {
-    id: 202,
-    title: "The Last of Us",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
-    provider: "netflix",
-    type: "tv",
-    progress: 40,
-  },
-  {
-    id: 203,
-    title: "Black Mirror",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/5UaYsGZOFhjFDwQh6GuLjjA1WlF.jpg",
-    provider: "netflix",
-    type: "tv",
-    progress: 90,
-    badge: "new",
-  },
-  {
-    id: 101,
-    title: "Squid Game",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
-    provider: "netflix",
-    type: "tv",
-    match: 97,
-  },
-  {
-    id: 104,
-    title: "Wednesday",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",
-    provider: "netflix",
-    type: "tv",
-    match: 94,
-  },
-  {
-    id: 105,
-    title: "Money Heist",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
-    provider: "netflix",
-    type: "tv",
-    match: 93,
-  },
-  {
-    id: 106,
-    title: "The Queen's Gambit",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg",
-    provider: "netflix",
-    type: "tv",
-    match: 98,
-  },
-];
 
 const HLS_DEMO_VIDEO = "https://customer-m033z5x00ks6nunl.cloudflarestream.com/b236bde30eb07b9d01318940e5fc3eda/manifest/video.m3u8";
 const AVATAR_DESCRIPTION = "Set in the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting the world he feels is his home.";
@@ -120,18 +49,28 @@ const Page = () => {
       try {
         const snapshot = await getDocs(moviesCol);
         const fetchedMovies = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
+          ...doc.data(),
+          id: doc.id
         })) as unknown as Movie[];
         
         const shuffledMovies = shuffleArray(fetchedMovies);
 
-
         if (shuffledMovies.length > 0) {
           setFeaturedItem(shuffledMovies[0]);
-          setTrendingContent(shuffledMovies.slice(0, 10))
-          setContinueWatching(shuffledMovies.slice(20, 30));
-          setNetflixOriginals(shuffledMovies.slice(30, 50)); 
+          
+          setTrendingContent(shuffledMovies.slice(0, 10));
+          
+          const continueWatchingMovies = shuffledMovies.slice(10, 20).map(movie => ({
+            ...movie,
+            progress: Math.floor(pseudoRandom(String(movie.id)) * 95) + 5,
+          }));
+          setContinueWatching(continueWatchingMovies);
+          
+          const netflixOriginalsMovies = shuffledMovies.slice(20, 30).map(movie => ({
+            ...movie,
+            match: Math.floor(pseudoRandom(String(movie.id)) * 20) + 80,
+          }));
+          setNetflixOriginals(netflixOriginalsMovies); 
         }
         return fetchedMovies;
       } catch (error) {
@@ -191,7 +130,7 @@ const Page = () => {
               <div className="mt-2 w-full bg-gray-600 h-1 rounded-full overflow-hidden">
                 <div
                   className="bg-red-600 h-full"
-                  // style={{ width: `${(item as unknown as Movie).progress}%` }}
+                  style={{ width: `${item.progress}%` }}
                 />
               </div>
             </CarouselItem>
@@ -209,7 +148,7 @@ const Page = () => {
               provider={item.provider}
             >
               <div className="mt-1 text-xs text-green-500 font-medium">
-                {50}% Match
+                {item.match}% Match
               </div>
             </CarouselItem>
           ))}
