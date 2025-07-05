@@ -121,6 +121,7 @@ const Page = () => {
               title={item.title}
               thumbnail={item.thumbnail}
               provider={item.provider}
+              videoUrl={item.videoUrl}
             />
           ))}
         </Carousel>
@@ -133,6 +134,7 @@ const Page = () => {
               title={item.title}
               thumbnail={item.thumbnail}
               provider={item.provider}
+              videoUrl={item.videoUrl}
             >
               <div className='mt-2 w-full bg-gray-600 h-1 rounded-full overflow-hidden'>
                 <div
@@ -153,6 +155,7 @@ const Page = () => {
               title={item.title}
               thumbnail={item.thumbnail}
               provider={item.provider}
+              videoUrl={item.videoUrl}
             >
               <div className='mt-1 text-xs text-green-500 font-medium'>
                 {item.match}% Match
