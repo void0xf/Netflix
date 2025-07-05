@@ -9,8 +9,10 @@ import { UserProfile } from '@/types/userProfile';
 import { collection, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 const Navbar = () => {
+  const { userData } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [selectedProfile, setSelectedProfile] = useState<UserProfile | null>(
@@ -172,6 +174,14 @@ const Navbar = () => {
                     )
                 )}
                 <div className='border-t border-gray-600 my-1'></div>
+                {userData?.admin && (
+                  <Link
+                    href='/admin'
+                    className='text-white hover:underline text-sm p-2 flex items-center justify-center'
+                  >
+                    Admin Panel
+                  </Link>
+                )}
                 <Link
                   href='/account/acchoose'
                   className='text-white hover:underline text-sm p-2 flex items-center justify-center'
